@@ -4,28 +4,27 @@
 // Connect with other who are feeling what you're feeling at that exact moment.
 
 
-var post = function(currentUrl){
+var post = function(url, title){
   // TODO: Gmail OAuth connection
-  var message = {to: 'problems@letsfix.net', subject: pageTitle, message: currentUrl};
+  var message = {to: 'problems@letsfix.net', subject: title, message: url};
   // gmailSend(message); //not finished
+  console.log(message);
 };
 
 var gmailSend = function(content){
 
 
   // doesn't work
-
-  return Gmail IMAP library;
+  //  return GmailIMAPlibrary;
 };
 
 var lfxURL = function(){
-  success: function(){
-    var currentUrl = document.URL;
-    var pageTitle = document.title;
-    post(currentUrl);
-  },
-  fail: console.log('Error posting AJAX');
-});
+  chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function(tabs){
+    var url = tabs[0].url;
+    var title = tabs[0].title;
+    post(url, title);
+  });
+};
 
 
 // Called when the user clicks on the browser action.
