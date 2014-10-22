@@ -2,33 +2,39 @@
 // 
 // Share URL with crowd.
 // Connect with other who are feeling what you're feeling at that exact moment.
-
-// Authentic with Google OAuth
-
-// Ask user permission to authorize Gmail OAuth API
-
-chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
-  // Use the token.
-});
+// by: letsfix.net
 
 
-// Send Ajax request to your server with email parameters (to, subject, body, etc.)
+// Build email parameters (to, subject, body, etc.)
 var post = function(url, title){
   var message = {to: 'problems@letsfix.net', subject: title, message: url};
-  // gmailSend(message); //not finished
   console.log(message);
+
+  auth(message);
+
 };
 
 // Send mail through SMTP with Gmail OAuth API
-
-
 var gmailSend = function(content){
 
 };
 
-// Display a notification for sending success
-var noteSuccess = function(){
+// Authenticate with Google OAuth
+var auth = function(msg){
 
+  // Ask user permission to authorize Gmail OAuth API
+  chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
+    
+    console.log(token);
+
+    //gmailSend(token, msg);
+  });
+
+};
+
+
+// TODO: Display a notification for sending success
+var noteSuccess = function(){
 };
 
 
