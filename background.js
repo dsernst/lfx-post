@@ -14,7 +14,7 @@ var getTabInfo = function(){
     var url = tabs[0].url;
     var title = tabs[0].title;
 
-    // escape special characters
+    // escape special characters to prep for base64 encoding
     url = encodeWeirdChars(url);
     title = encodeWeirdChars(title);
 
@@ -51,14 +51,13 @@ var buildMessage = function(url, title, comment){
 };
 
 
-var auth = function(msg){
+var auth = function(message){
   // Ask user permission to authorize Gmail OAuth API
   chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
     
     console.log(token);
 
-    // 'me' is a special value to use authenticated user
-    sendMessage('me', msg);
+    sendMessage(message);
   });
 
 };
@@ -66,10 +65,11 @@ var auth = function(msg){
 
 // Send mail through SMTP with Gmail OAuth API
 // see: https://developers.google.com/gmail/api/v1/reference/users/messages/send
-var sendMessage = function(userId, email, callback){
-  var base64EncodedEmail = btoa(email);
+var sendMessage = function(message, callback){
+  var base64EncodedEmail = btoa(message);
   var request = gapi.client.gmail.users.messages.send({
-    'userId': userId,
+    // 'me' is a special value, uses authenticated user
+    'userId': 'me',
     'message': {
       'raw': base64EncodedEmail
     }
