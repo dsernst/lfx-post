@@ -8,22 +8,32 @@
 // Load Google API Client Library
 // <script src = "https://apis.google.com/js/client.js?onload=handleClientLoad" >
 
-var stripBadChars = function(string){
-  var encoded = encodeURI(string);
-  var normalSpaces = encoded.replace(/%20/g," ");
 
-  return normalSpaces
+var getTabInfo = function(){
+  chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function(tabs){
+    var url = tabs[0].url;
+    var title = tabs[0].title;
+
+    // escape special characters
+    url = encodeBadChars(url);
+    title = encodeBadChars(title);
+
+    post(url, title);
+  });
 };
 
-// Build email parameters (to, subject, body, etc.)
+
+var encodeBadChars = function(string){
+  var encoded = encodeURI(string);
+  var normalSpaces = encoded.replace(/%20/g," ");
+  return normalSpaces;
+};
+
+
 var post = function(url, title){
-  
-  // escape special characters
-  url = stripBadChars(url);
-  title = stripBadChars(title);
+  // Build email parameters (to, subject, body)
+  var message = "To: <problems@letsfix.net>\nSubject: [Lfx-post] " + title + "\n\n" + url;
 
-
-  var message = "To: <problems@letsfix.net>\nSubject: Lfx-post: " + title + "\n\n" + url;
   console.log(message);
 
   auth(message);
@@ -31,16 +41,22 @@ var post = function(url, title){
 };
 
 
+var auth = function(msg){
+  // Ask user permission to authorize Gmail OAuth API
+  chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
+    
+    console.log(token);
+
+    // 'me' is a special value to use authenticated user
+    sendMessage('me', msg);
+  });
+
+};
+
+
 // Send mail through SMTP with Gmail OAuth API
-/**
- * Send Message.
- *
- * @param  {String} userId User's email address. The special value 'me'
- * can be used to indicate the authenticated user.
- * @param  {String} email RFC 5322 formatted String.
- * @param  {Function} callback Function to call when the request is complete.
- */
-function sendMessage(userId, email, callback) {
+// see: https://developers.google.com/gmail/api/v1/reference/users/messages/send
+var sendMessage = function(userId, email, callback){
   var base64EncodedEmail = btoa(email);
   var request = gapi.client.gmail.users.messages.send({
     'userId': userId,
@@ -52,37 +68,13 @@ function sendMessage(userId, email, callback) {
 };
 
 
-// Authenticate with Google OAuth
-var auth = function(msg){
-
-  // Ask user permission to authorize Gmail OAuth API
-  chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
-    
-    console.log(token);
-
-    sendMessage('me', msg);
-  });
-
-};
-
-
 // TODO: Display a notification for sending success
 var noteSuccess = function(){
 };
 
 
-
-var lfxURL = function(){
-  chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function(tabs){
-    var url = tabs[0].url;
-    var title = tabs[0].title;
-    post(url, title);
-  });
-};
-
-
 // Called when the user clicks on the browser action.
 chrome.browserAction.onClicked.addListener(function(tab) {
-  var action_url = lfxURL();
+  var action_url = getTabInfo();
   chrome.tabs.update(tab.id, {url: action_url});
 });
