@@ -18,7 +18,7 @@ var getTabInfo = function(){
     url = encodeBadChars(url);
     title = encodeBadChars(title);
 
-    post(url, title);
+    askForComments(url, title);
   });
 };
 
@@ -30,9 +30,20 @@ var encodeBadChars = function(string){
 };
 
 
-var post = function(url, title){
+var askForComments = function(url, title){
+
+  var comment = "";
+
+  // TODO: Show input field in popup.html to ask for comments
+
+  post(url, title, comment)
+}
+
+
+
+var post = function(url, title, comment){
   // Build email parameters (to, subject, body)
-  var message = "To: <problems@letsfix.net>\nSubject: [Lfx-post] " + title + "\n\n" + url;
+  var message = "To: <problems@letsfix.net>\nSubject: [Lfx-post] " + title + "\n\n" + url + "\n\n" + comment;
 
   console.log(message);
 
