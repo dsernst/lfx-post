@@ -15,15 +15,15 @@ var getTabInfo = function(){
     var title = tabs[0].title;
 
     // escape special characters
-    url = encodeBadChars(url);
-    title = encodeBadChars(title);
+    url = encodeWeirdChars(url);
+    title = encodeWeirdChars(title);
 
     askForComments(url, title);
   });
 };
 
 
-var encodeBadChars = function(string){
+var encodeWeirdChars = function(string){
   var encoded = encodeURI(string);
   var normalSpaces = encoded.replace(/%20/g," ");
   return normalSpaces;
@@ -31,17 +31,16 @@ var encodeBadChars = function(string){
 
 
 var askForComments = function(url, title){
-
   var comment = "";
 
   // TODO: Show input field in popup.html to ask for comments
 
-  post(url, title, comment);
+  buildMessage(url, title, comment);
 }
 
 
 
-var post = function(url, title, comment){
+var buildMessage = function(url, title, comment){
   // Build email parameters (to, subject, body)
   var message = "To: <problems@letsfix.net>\nSubject: [Lfx-post] " + title + "\n\n" + url + "\n\n" + comment;
 
