@@ -36,7 +36,7 @@ var askForComments = function(url, title){
 
   // TODO: Show input field in popup.html to ask for comments
 
-  post(url, title, comment)
+  post(url, title, comment);
 }
 
 
