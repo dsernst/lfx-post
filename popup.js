@@ -17,7 +17,7 @@ var gatherTabInfo = function(){
 
 var passInfoToPopup = function(url, title){
   $('#pageURL').html(url);
-//  $('#pageURL').attr('href', url);
+//  $('#pageURL').attr('href', url);    // commented out due to focus bug.
   $('#pageTitle').html(title);
   $('#commentField').focus();
 };
@@ -81,7 +81,6 @@ var auth = function(message){
 // see https://developers.google.com/gmail/api/v1/reference/users/messages/send
 var sendMessage = function(message, callback){
   var base64EncodedEmail = btoa(message);
-  console.log("about to send gapi request");
   var request = gapi.client.gmail.users.messages.send({
     // 'me' is a special value, uses authenticated user
     'userId': 'me',
@@ -94,7 +93,7 @@ var sendMessage = function(message, callback){
 
 
 var noteSuccess = function(){
-  document.body.innerHTML = "<h3>Success!</h3>";
+  document.body.innerHTML = "<h3>Success...?</h3>";
 };
 
 
