@@ -5,14 +5,18 @@
 // by: letsfix.net
 
 
-// Load Google API Client Library
-// <script src = "https://apis.google.com/js/client.js?onload=handleClientLoad" >
+var beginProcess = function(tab) {
+  var action_url = getTabInfo();
+  chrome.tabs.update(tab.id, {url: action_url});
+};
 
 
 var getTabInfo = function(){
   chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function(tabs){
     var url = tabs[0].url;
     var title = tabs[0].title;
+
+    passInfoToPopup(url, title);
 
     // escape special characters to prep for base64 encoding
     url = encodeWeirdChars(url);
@@ -30,13 +34,21 @@ var encodeWeirdChars = function(string){
 };
 
 
-var askForComments = function(url, title){
-  var comment = "";
+var passInfoToPopup = function(url, title){
+  document.getElementById('pageURL').innerHTML = url;  
+  document.getElementById('pageTitle').innerHTML = title;
+};
 
-  // TODO: Show input field in popup.html to ask for comments
 
-  buildMessage(url, title, comment);
-}
+document.addEventListener('DOMContentLoaded', function() {
+    var submit = document.getElementById('submitComment');
+    // onClick's logic below:
+    submit.addEventListener('click', function() {
+
+
+        buildMessage(url, title, comment);
+    });
+});
 
 
 
@@ -64,7 +76,7 @@ var auth = function(message){
 
 
 // Send mail through SMTP with Gmail OAuth API
-// see: https://developers.google.com/gmail/api/v1/reference/users/messages/send
+// see https://developers.google.com/gmail/api/v1/reference/users/messages/send
 var sendMessage = function(message, callback){
   var base64EncodedEmail = btoa(message);
   var request = gapi.client.gmail.users.messages.send({
@@ -83,8 +95,7 @@ var noteSuccess = function(){
 };
 
 
-// Called when the user clicks on the browser action.
-chrome.browserAction.onClicked.addListener(function(tab) {
-  var action_url = getTabInfo();
-  chrome.tabs.update(tab.id, {url: action_url});
+// Begin running our script as soon as the document's DOM is ready.
+document.addEventListener('DOMContentLoaded', function () {
+  beginProcess();
 });
