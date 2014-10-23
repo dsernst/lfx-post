@@ -5,26 +5,46 @@
 // by: letsfix.net
 
 
-var beginProcess = function(tab) {
-  var action_url = getTabInfo();
-  chrome.tabs.update(tab.id, {url: action_url});
-};
-
-
-var getTabInfo = function(){
+var gatherTabInfo = function(){
   chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function(tabs){
     var url = tabs[0].url;
     var title = tabs[0].title;
 
     passInfoToPopup(url, title);
-
-    // escape special characters to prep for base64 encoding
-    url = encodeWeirdChars(url);
-    title = encodeWeirdChars(title);
-
-    askForComments(url, title);
   });
 };
+
+
+var passInfoToPopup = function(url, title){
+  $('#pageURL').html(url);
+//  $('#pageURL').attr('href', url);
+  $('#pageTitle').html(title);
+  $('#commentField').focus();
+};
+
+
+document.addEventListener('DOMContentLoaded', function() {
+
+  $('#submitComment').click(function (e) {
+    e.preventDefault();
+    collectComment();
+  });
+});
+
+
+var collectComment = function(){
+  var url = $('#pageURL').html();
+  var title = $('#pageTitle').html();
+
+  // escape special characters to prep for base64 encoding
+  url = encodeWeirdChars(url);
+  title = encodeWeirdChars(title);
+
+  var comment = $('#commentField').val();
+
+  buildMessage(url, title, comment);
+
+}
 
 
 var encodeWeirdChars = function(string){
@@ -32,24 +52,6 @@ var encodeWeirdChars = function(string){
   var normalSpaces = encoded.replace(/%20/g," ");
   return normalSpaces;
 };
-
-
-var passInfoToPopup = function(url, title){
-  document.getElementById('pageURL').innerHTML = url;  
-  document.getElementById('pageTitle').innerHTML = title;
-};
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    var submit = document.getElementById('submitComment');
-    // onClick's logic below:
-    submit.addEventListener('click', function() {
-
-
-        buildMessage(url, title, comment);
-    });
-});
-
 
 
 var buildMessage = function(url, title, comment){
@@ -69,7 +71,7 @@ var auth = function(message){
     
     console.log(token);
 
-    sendMessage(message);
+    sendMessage(message, noteSuccess() );
   });
 
 };
@@ -79,6 +81,7 @@ var auth = function(message){
 // see https://developers.google.com/gmail/api/v1/reference/users/messages/send
 var sendMessage = function(message, callback){
   var base64EncodedEmail = btoa(message);
+  console.log("about to send gapi request");
   var request = gapi.client.gmail.users.messages.send({
     // 'me' is a special value, uses authenticated user
     'userId': 'me',
@@ -90,12 +93,12 @@ var sendMessage = function(message, callback){
 };
 
 
-// TODO: Display a notification for sending success
 var noteSuccess = function(){
+  document.body.innerHTML = "<h3>Success!</h3>";
 };
 
 
 // Begin running our script as soon as the document's DOM is ready.
 document.addEventListener('DOMContentLoaded', function () {
-  beginProcess();
+  gatherTabInfo();
 });

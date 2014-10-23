@@ -5,7 +5,7 @@
   "permissions": [
     "tabs", "http://*/*", "https://*/*", "identity"
   ],
-  "content_security_policy": "script-src 'self' https://apis.google.com; object-src 'self'",
+  "content_security_policy": "script-src 'self' https://apis.google.com https://ajax.googleapis.com; object-src 'self'",
   "oauth2": {
     "client_id": "484932965756-9ndp5h9vb9it13r3tbtjgrst5vl5nmbm.apps.googleusercontent.com",
     "scopes": [
