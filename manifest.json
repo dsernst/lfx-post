@@ -3,15 +3,9 @@
   "description": "Post the current URL to letsfix.net",
   "version": "0.3",
   "permissions": [
-    "tabs", "http://*/*", "https://*/*", "identity"
+    "tabs", "http://*/*", "https://*/*", "*://*.amazonaws.com/*"
   ],
-  "content_security_policy": "script-src 'self' https://apis.google.com https://ajax.googleapis.com; object-src 'self'",
-  "oauth2": {
-    "client_id": "484932965756-9ndp5h9vb9it13r3tbtjgrst5vl5nmbm.apps.googleusercontent.com",
-    "scopes": [
-      "https://www.googleapis.com/auth/gmail.compose"
-    ]
-  },
+  "content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'",
   "icons": { "16": "icon16.png",
            "48": "icon48.png",
           "128": "icon128.png" },
