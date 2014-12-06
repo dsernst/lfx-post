@@ -1,3 +1,4 @@
+/*global chrome*/
 // Letsfix Chrome Extension
 // 
 // Share URL with crowd.
