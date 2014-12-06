@@ -1,9 +1,10 @@
 {
   "name": "Share with Letsfix.net",
   "description": "Post the current URL to letsfix.net",
-  "version": "0.3",
+  "version": "0.5",
+  "options_page": "options.html",
   "permissions": [
-    "tabs", "http://*/*", "https://*/*", "*://*.amazonaws.com/*"
+    "tabs", "http://*/*", "https://*/*", "*://*.amazonaws.com/*", "storage"
   ],
   "content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'",
   "icons": { "16": "icon16.png",
