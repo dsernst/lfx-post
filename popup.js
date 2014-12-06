@@ -41,6 +41,7 @@ var getEmail = function (message) {
   return chrome.storage.sync.get({user: ''}, function (items) {
     console.log("I am the chrome.storage.sync.get callback: " + items.user);
     if (items.user === '') {
+      items.user = 'unknown-user';
       chrome.tabs.create({url: "options.html"});
     }
     message.user = items.user;
