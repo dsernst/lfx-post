@@ -2,6 +2,7 @@
 
 A Chrome extension that helps you quickly share a URL with [letsfix.net](http://letsfix.net)
 
+![screenshot of lfx-post](example.png)
 
 #### Install Instructions:
 1. Clone repo to local system.
