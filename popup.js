@@ -5,15 +5,6 @@
 // Connect with other who are feeling what you're feeling at that exact moment.
 // by: letsfix.net
 
-chrome.runtime.onInstalled.addListener(function () {
-  chrome.storage.sync.get({user: ''}, function (items) {
-    console.log("I am the chrome.storage.sync.get callback: " + items.user);
-    if (items.user === '') {
-      chrome.tabs.create({url: "options.html"});
-    }
-  });
-});
-
 var encodeWeirdChars = function (string) {
   var encoded = encodeURI(string);
   var normalSpaces = encoded.replace(/%20/g, ' ');
