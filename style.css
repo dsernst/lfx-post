@@ -1,0 +1,9 @@
+#commentField {
+  min-width: 290px; 
+  min-height: 120px; 
+  width: 97.5%;
+} 
+
+#submitComment {
+  width: 100%;
+}
