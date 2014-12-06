@@ -11,6 +11,7 @@ var encodeWeirdChars = function (string) {
 };
 
 var noteErrors = function (jqXHR, textStatus, errorThrown) {
+  jqXHR = JSON.stringify(jqXHR);
   console.error(jqXHR + '\n\n' + textStatus + '\n\n' + errorThrown);
 };
 
@@ -26,8 +27,10 @@ var postItem = function (message) {
     type: "PUT",
     url: uploadPath,
     dataType: 'json',
+    contentType: 'application/json',
     async: false,
-    data: JSON.stringify(message),
+    headers: {'x-amz-acl': 'bucket-owner-full-control'},
+    data: JSON.stringify({"data": message}),
     error: noteErrors,
     success: noteSuccess
   });
