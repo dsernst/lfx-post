@@ -3,18 +3,25 @@
   <head>
     <title>Lfx-post Extension's Popup</title>
     <script src="popup.js"></script>
-    <link href="style.css">
+    <link href="style.css" type="text/css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   </head>
 
   <body>
-    <h2>Submit to Letsfix</h2>
-    <p><em>Title: </em><span id="pageTitle"></span></p>
-    <p><em>URL: </em><a id="pageURL" target="_blank"></a></p>
-    <form name="lfx-comments" >
-      <textarea placeholder="Want to comment?" id="commentField"></textarea><br />
-      <input type="submit" id="submitComment" value="Submit">
-    </form>
+    <section class="userInfo">
+      <h3>What's your email address?</h3>
+      <input type="email" placeholder="you@domain.com" required>
+      <button>Submit</button>
+    </section>
+    <section class="contentInfo">
+      <h2>Submit to Letsfix</h2>
+      <p><em>Title: </em><span id="pageTitle"></span></p>
+      <p><em>URL: </em><a id="pageURL" target="_blank"></a></p>
+      <form name="lfx-comments" >
+        <textarea placeholder="Want to comment?" id="commentField"></textarea><br />
+        <input type="submit" id="submitComment" value="Submit">
+      </form>
+    </section>
   </body>
 
 </html>

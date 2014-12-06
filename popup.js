@@ -22,7 +22,7 @@ var noteSuccess = function (data, textStatus, jqXHR) {
 
 var postItem = function (message) {
   var timestamp = new Date().getTime();
-  var uploadPath = 'http://lfxpost.s3.amazonaws.com/receive/' + timestamp + '.json';
+  var uploadPath = 'http://lfxpost.s3.amazonaws.com/receive/' + message.user + '/' + timestamp + '.json';
   $.ajax({
     type: "PUT",
     url: uploadPath,
@@ -35,14 +35,28 @@ var postItem = function (message) {
   });
 };
 
+
 // Begin running our script as soon as the document's DOM is ready.
 document.addEventListener('DOMContentLoaded', function () {
   var message = {};
-
+  var email = '';
   // Gather Tab Info
   chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
     message.url = encodeWeirdChars(tabs[0].url);
     message.title = encodeWeirdChars(tabs[0].title);
+
+    var getEmail = function () {
+      $('.contentInfo').addClass('hidden');
+      $('.userInfo button').click(function () {
+        email = $('.userInfo input').val();
+        $('.userInfo').addClass('hidden');
+        $('.contentInfo').removeClass('hidden');
+      });
+    };
+
+    if (email === '') {
+      getEmail();
+    }
 
     // Pass Info To Popup
     $('#pageURL').html(message.url);
@@ -55,6 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
     e.preventDefault();
     message.comment = $('#commentField').val();
     message.timestamp = new Date().getTime();
+    message.user = email;
     console.log(message);
     postItem(message);
   });
