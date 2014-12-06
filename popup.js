@@ -26,7 +26,6 @@ var postItem = function (message) {
   $.ajax({
     type: "PUT",
     url: uploadPath,
-    dataType: 'json',
     contentType: 'application/json',
     async: false,
     headers: {'x-amz-acl': 'bucket-owner-full-control'},
