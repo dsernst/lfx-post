@@ -17,6 +17,7 @@ var noteErrors = function (jqXHR, textStatus, errorThrown) {
 
 var noteSuccess = function (data, textStatus, jqXHR) {
   document.body.innerHTML = "<h3>Success</h3>";
+  jqXHR = JSON.stringify(jqXHR);
   console.info(data + '\n\n' + textStatus + '\n\n' + jqXHR);
 };
 
@@ -35,28 +36,24 @@ var postItem = function (message) {
   });
 };
 
+var getEmail = function () {
+  return chrome.storage.sync.get({user: ''}, function (items) {
+    console.log("41: " + items.user);
+    if (items.user === '') {
+      chrome.tabs.create({url: "options.html"});
+    }
+    return items.user;
+  });
+};
+
 
 // Begin running our script as soon as the document's DOM is ready.
 document.addEventListener('DOMContentLoaded', function () {
   var message = {};
-  var email = '';
   // Gather Tab Info
   chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
     message.url = encodeWeirdChars(tabs[0].url);
     message.title = encodeWeirdChars(tabs[0].title);
-
-    var getEmail = function () {
-      $('.contentInfo').addClass('hidden');
-      $('.userInfo button').click(function () {
-        email = $('.userInfo input').val();
-        $('.userInfo').addClass('hidden');
-        $('.contentInfo').removeClass('hidden');
-      });
-    };
-
-    if (email === '') {
-      getEmail();
-    }
 
     // Pass Info To Popup
     $('#pageURL').html(message.url);
@@ -69,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
     e.preventDefault();
     message.comment = $('#commentField').val();
     message.timestamp = new Date().getTime();
-    message.user = email;
+    message.user = getEmail();
     console.log(message);
     postItem(message);
   });

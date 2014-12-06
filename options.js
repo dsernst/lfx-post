@@ -17,7 +17,7 @@ function save_options() {
 function restore_options() {
   // Use default value user = ''.
   chrome.storage.sync.get({
-    user: '',
+    user: ''
   }, function (items) {
     document.getElementById('userEmail').value = items.user;
   });
