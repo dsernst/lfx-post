@@ -36,13 +36,15 @@ var postItem = function (message) {
   });
 };
 
-var getEmail = function () {
+var getEmail = function (message) {
   return chrome.storage.sync.get({user: ''}, function (items) {
-    console.log("41: " + items.user);
+    console.log("I am the chrome.storage.sync.get callback: " + items.user);
     if (items.user === '') {
       chrome.tabs.create({url: "options.html"});
     }
-    return items.user;
+    message.user = items.user;
+    console.log(message);
+    postItem(message);
   });
 };
 
@@ -66,8 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
     e.preventDefault();
     message.comment = $('#commentField').val();
     message.timestamp = new Date().getTime();
-    message.user = getEmail();
-    console.log(message);
-    postItem(message);
+    getEmail(message);
   });
+
 });
