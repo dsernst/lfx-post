@@ -23,7 +23,7 @@ var noteSuccess = function (data, textStatus, jqXHR) {
 
 var postItem = function (message) {
   var timestamp = new Date().getTime();
-  var uploadPath = 'http://lfxpost.s3.amazonaws.com/receive/' + message.user + '/' + timestamp + '.json';
+  var uploadPath = 'http://lfxpost.s3.amazonaws.com/' + message.user + '/' + timestamp + '.json';
   $.ajax({
     type: "PUT",
     url: uploadPath,
