@@ -1,0 +1,19 @@
+#commentField {
+  min-width: 290px; 
+  min-height: 120px; 
+  width: 97.5%;
+} 
+
+#submitComment {
+  width: 100%;
+}
+
+.userInfo {
+  min-width: 239px;
+  min-height: 70px;
+  width: 97.5%;
+}
+
+.hidden {
+  display: none;
+}
