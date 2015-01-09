@@ -53,7 +53,7 @@ var getEmail = function (message) {
 
 // Begin running our script as soon as the document's DOM is ready.
 document.addEventListener('DOMContentLoaded', function () {
-  var message = {pageDetails: false};
+  var message = {pageDetails: false, votes: 1};
   // Gather Tab Info
   chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
     message.url = encodeWeirdChars(tabs[0].url);
