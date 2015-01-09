@@ -10,11 +10,13 @@
   <body>
     <section class="contentInfo">
       <h2>Hack Reactor Feedbyte</h2>
-      <p><em>Title: </em><span id="pageTitle"></span></p>
-      <p><em>URL: </em><a id="pageURL" target="_blank"></a></p>
-      <form name="lfx-comments" >
-        <textarea placeholder="Want to comment?" id="commentField"></textarea><br />
+      <form name="comments" >
+        <textarea placeholder="Your comment" id="commentField"></textarea><br />
         <input type="submit" id="submitComment" value="Submit">
+        <div id="pageDetails">
+          <p><em>URL: </em><a id="pageURL" target="_blank"></a></p>
+          <p><em>Title: </em><span id="pageTitle"></span></p>
+        </div>
       </form>
     </section>
   </body>
