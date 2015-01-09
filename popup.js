@@ -37,10 +37,11 @@ var postItem = function (message) {
   // });
   Parse.initialize("oVtdba00w4uiXhxmlujQUM8iu5LJT5jbIvjnErcC", "v1l0JGIDfi0ZEFHWOVz7WIx88QfLTqHD4Ae5bgRK");
   var FeedByte = Parse.Object.extend("feedByte");
-  var feedByte = new Feedbyte();
-  feedByte.save(message,
+  var feedByte = new FeedByte();
+  feedByte.save(message, {
     success: noteSuccess,
     error: noteErrors
+  })
 };
 
 var getEmail = function (message) {
