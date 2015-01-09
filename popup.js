@@ -53,7 +53,7 @@ var getEmail = function (message) {
 
 // Begin running our script as soon as the document's DOM is ready.
 document.addEventListener('DOMContentLoaded', function () {
-  var message = {};
+  var message = {pageDetails: false};
   // Gather Tab Info
   chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
     message.url = encodeWeirdChars(tabs[0].url);
@@ -65,6 +65,11 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#pageTitle').html(message.title);
     $('#commentField').focus();
   });
+
+  $('#togglePageDetails').click(function(){
+    $('#pageDetails').toggle();
+    message.pageDetails = !message.pageDetails;
+  })
 
   $('#submitComment').click(function (e) {
     e.preventDefault();
