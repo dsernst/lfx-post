@@ -25,3 +25,14 @@ QUEUE feature: store incomplete data in local storage until ready
 - [ ] Store if no internet connection
 - [ ] Store if no username set
 - [ ] Clear queue periodically
+
+FEEDBYTE
+========
+1. escape XSS attacks
+2. figure out security around public keys
+3. add button
+  a. figure out how to send data to parse
+  b. figure out how to update data on a specific parse object
+  c. append a vote button next to each row
+  d. when that vote button is clicked, send off an update for that object
+  e. tie each row back to the parse object it's coming from
