@@ -17,7 +17,7 @@ var noteErrors = function (jqXHR, textStatus, errorThrown) {
 };
 
 var noteSuccess = function (data, textStatus, jqXHR) {
-  document.body.innerHTML = "<h3>Success</h3>";
+  document.body.innerHTML = "<h3>Thank you!</h3>";
   jqXHR = JSON.stringify(jqXHR);
   console.info(data + '\n\n' + textStatus + '\n\n' + jqXHR);
 };
