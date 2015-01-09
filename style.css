@@ -10,6 +10,13 @@ body {
 
 #submitComment {
   width: 100%;
+  background-color: rgb(218, 235, 250);
+  border: 1px solid rgb(176, 192, 226);
+  border-radius: 4px;
+}
+
+#submitComment:active {
+  background-color: white;
 }
 
 #pageDetails {
