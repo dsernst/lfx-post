@@ -1,0 +1,20 @@
+{
+  "name": "lfx-post",
+  "version": "0.0.0",
+  "homepage": "https://github.com/ClimbsRocks/lfx-post",
+  "authors": [
+    "ClimbsRocks <ClimbsRocks@users.noreply.github.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bluebird": "~2.6.2",
+    "bootstrap": "~3.3.1"
+  }
+}

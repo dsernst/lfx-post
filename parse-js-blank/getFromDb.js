@@ -4,7 +4,7 @@ var getFromDb = function(className, callback) {
     query.find().then(function(results) {
       var objects = [];
       results.forEach(function(obj) {
-        //adding the object id so we can identify it later
+        //adding the object id so we can uniquely identify this object later
         obj.attributes['parseID'] = obj.id;
         objects.push(obj.attributes);
       })
