@@ -44,6 +44,8 @@
 
 
     var FeedByte = Parse.Object.extend("feedByte");
+    var Point = Parse.Object.extend("feedByte");
+    var query = new Parse.Query("feedByte");
      
      //defines getData, which kicks off a string of promises
     var getData = function(className) {
@@ -54,26 +56,52 @@
     };
 
     //invokes getData with our Parse object
-    getData(FeedByte).then(function(results) {
-      var objects = [];
-      //gathering the object attributes and id so we can uniquely identify this object later
-      results.forEach(function(obj) {
-        obj.attributes['parseID'] = obj.id;
-        objects.push(obj.attributes);
+    var getAndUpdateAllData = function() {
+      getData(FeedByte).then(function(results) {
+        var objects = [];
+        //gathering the object attributes and id so we can uniquely identify this object later
+        results.forEach(function(obj) {
+          obj.attributes['parseID'] = obj.id;
+          objects.push(obj.attributes);
+        })
+        return objects;
+      //once we have our messages, iterate through them
+      }).then(function(results) {
+        iterate(results);
       })
-      return objects;
-    //once we have our messages, iterate through them
-    }).then(function(results) {
-      iterate(results);
-    })
-    //once we've attached everything to the DOm, start our event listeners
-    .then(function(results) {
-      eventListeners()
-    });
+      //once we've attached everything to the DOm, start our event listeners
+      .then(function(results) {
+        eventListeners()
+      });
+    };
+    //invokes immediately upon page load
+    getAndUpdateAllData();
 
     var eventListeners = function() {
       $('button').on('click',function() {
-        console.log('heard a click!', $(this));
+        console.log('heard a click!', $(this).attr('parseID'));
+
+        // the below code is the right pattern to update the vote count without having to retrieve the object first. 
+        // however i'm getting a 404 error on this, so i'll try to do it the manual way: getting the object, updating it, and saving it
+
+        var point = new Point();
+        point.id = $(this).attr('parseID');
+
+        point.fetch() // returns a promise
+        .then(function(){
+          console.log('point',point);
+            point.increment("votes");
+            return point.save(); // returns a promise
+        })
+        .then(function() {
+          //after we've saved the data, update the data displayed in the DOM.
+          //this part is super crude right now- it wipes the whole dom and fetches all the data from the db again. 
+          $('tbody').html('');
+          getAndUpdateAllData();
+        }, function() {
+          console.log('failed to post new vote count');
+        });
+
       });
     }
 

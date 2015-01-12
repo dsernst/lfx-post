@@ -36,3 +36,4 @@ FEEDBYTE
   c. append a vote button next to each row
   d. when that vote button is clicked, send off an update for that object
   e. tie each row back to the parse object it's coming from
+4. Add filter for "wants to have url displayed"
