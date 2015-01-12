@@ -2,7 +2,7 @@
 // Letsfix Chrome Extension
 // 
 // Share URL with crowd.
-// Connect with other who are feeling what you're feeling at that exact moment.
+// Connect with others who are feeling what you're feeling at that exact moment.
 // by: letsfix.net
 
 var encodeWeirdChars = function (string) {
@@ -22,16 +22,35 @@ var noteSuccess = function (data, textStatus, jqXHR) {
   console.info(data + '\n\n' + textStatus + '\n\n' + jqXHR);
 };
 
+//map of dangerous characters to a hex representation
+var entityMap = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;",
+  "/": "&#x2F;",
+  "\n": "<br>"
+};
+
+// escaping html for XSS attacks
+function escapeHtml(string) {
+  return String(string).replace(/[&<>"'\/]|[\n]/g, function (s) {
+    return entityMap[s];
+  });
+}
+
 var postItem = function (message) {
   var timestamp = new Date().getTime();
-  var uploadPath = 'http://lfxpost.s3.amazonaws.com/' + message.user + '/' + timestamp + '.json';
+  var safeMessage = escapeHtml(message);
+  var uploadPath = 'http://lfxpost.s3.amazonaws.com/' + escapeHtml(message.user) + '/' + timestamp + '.json';
   $.ajax({
     type: "PUT",
     url: uploadPath,
     contentType: 'application/json',
     async: false,
     headers: {'x-amz-acl': 'bucket-owner-full-control'},
-    data: JSON.stringify({"data": message}),
+    data: JSON.stringify({"data": safeMessage}),
     error: noteErrors,
     success: noteSuccess
   });
@@ -44,7 +63,7 @@ var getEmail = function (message) {
       items.user = 'unknown-user';
       chrome.tabs.create({url: "options.html"});
     }
-    message.user = items.user;
+    message.user = escapeHtml(items.user);
     console.log(message);
     postItem(message);
   });
@@ -56,8 +75,8 @@ document.addEventListener('DOMContentLoaded', function () {
   var message = {};
   // Gather Tab Info
   chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
-    message.url = encodeWeirdChars(tabs[0].url);
-    message.title = encodeWeirdChars(tabs[0].title);
+    message.url = escapeHtml(encodeWeirdChars(tabs[0].url));
+    message.title = escapeHtml(encodeWeirdChars(tabs[0].title));
 
     // Pass Info To Popup
     $('#pageURL').html(message.url);
@@ -68,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   $('#submitComment').click(function (e) {
     e.preventDefault();
-    message.comment = $('#commentField').val();
+    message.comment = escapeHtml($('#commentField').val());
     message.timestamp = new Date().getTime();
     getEmail(message);
   });
