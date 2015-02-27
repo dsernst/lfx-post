@@ -11,23 +11,10 @@ var encodeWeirdChars = function (string) {
   return normalSpaces;
 };
 
-var noteErrors = function (jqXHR, textStatus, errorThrown) {
-  jqXHR = JSON.stringify(jqXHR);
-  console.error(jqXHR + '\n\n' + textStatus + '\n\n' + errorThrown);
-};
-
-var noteSuccess = function (data, textStatus, jqXHR) {
-  document.body.innerHTML = "<h3>Thank you!</h3>";
-  jqXHR = JSON.stringify(jqXHR);
-  console.info(data + '\n\n' + textStatus + '\n\n' + jqXHR);
-};
-
 var postItem = function (message) {
   var firebase = new Firebase('https://feedbyte.firebaseio.com/');
-  firebase.set(message);
-
-  //  success: noteSuccess,
-  //  error: noteErrors
+  firebase.push(message);
+  document.body.innerHTML = "<h3>Thank you!</h3>";
 };
 
 var getEmail = function (message) {
@@ -46,7 +33,7 @@ var getEmail = function (message) {
 
 // Begin running our script as soon as the document's DOM is ready.
 document.addEventListener('DOMContentLoaded', function () {
-  var message = {pageDetails: false, votes: 1};
+  var message = {pageDetails: false, votes: 1, comments: {}};
   // Gather Tab Info
   chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
     message.url = encodeWeirdChars(tabs[0].url);
