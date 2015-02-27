@@ -14,6 +14,13 @@ var encodeWeirdChars = function (string) {
 // Begin running our script as soon as the document's DOM is ready.
 document.addEventListener('DOMContentLoaded', function () {
   var message = {pageDetails: false, votes: 1, comments: {}};
+
+  // Add event handler to Toggle Page Details link
+  $('#togglePageDetails').click(function () {
+    $('#pageDetails').toggle();
+    message.pageDetails = !message.pageDetails;
+  });
+
   // Gather Tab Info
   chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
     message.url = encodeWeirdChars(tabs[0].url);
@@ -21,15 +28,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Pass Info To Popup
     $('#pageURL').html(message.url);
-    //  $('#pageURL').attr('href', url);    // commented out due to focus bug.
+    //  $('#pageURL').attr('href', url);    // TODO: fix focus bug
     $('#pageTitle').html(message.title);
     $('#commentField').focus();
   });
 
-  $('#togglePageDetails').click(function () {
-    $('#pageDetails').toggle();
-    message.pageDetails = !message.pageDetails;
-  });
 
   $('#submitComment').click(function (e) {
     e.preventDefault();
@@ -37,12 +40,12 @@ document.addEventListener('DOMContentLoaded', function () {
     message.timestamp = new Date().getTime();
 
     // Grab user's email address from localstorage settings
-    chrome.storage.sync.get({user: ''}, function (items) {
-      if (items.user === '') {
-        items.user = 'unknown-user';
+    chrome.storage.sync.get({user: ''}, function (localstorage) {
+      if (localstorage.user === '') {
+        localstorage.user = 'unknown-user';
         chrome.tabs.create({url: "options.html"});
       }
-      message.user = items.user;
+      message.user = localstorage.user;
 
       // Post item
       var firebase = new Firebase('https://feedbyte.firebaseio.com/');
