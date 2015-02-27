@@ -11,26 +11,6 @@ var encodeWeirdChars = function (string) {
   return normalSpaces;
 };
 
-var postItem = function (message) {
-  var firebase = new Firebase('https://feedbyte.firebaseio.com/');
-  firebase.push(message);
-  document.body.innerHTML = "<h3>Thank you!</h3>";
-};
-
-var getEmail = function (message) {
-  return chrome.storage.sync.get({user: ''}, function (items) {
-    console.log("I am the chrome.storage.sync.get callback: " + items.user);
-    if (items.user === '') {
-      items.user = 'unknown-user';
-      chrome.tabs.create({url: "options.html"});
-    }
-    message.user = items.user;
-    console.log(message);
-    postItem(message);
-  });
-};
-
-
 // Begin running our script as soon as the document's DOM is ready.
 document.addEventListener('DOMContentLoaded', function () {
   var message = {pageDetails: false, votes: 1, comments: {}};
@@ -55,7 +35,23 @@ document.addEventListener('DOMContentLoaded', function () {
     e.preventDefault();
     message.comment = $('#commentField').val();
     message.timestamp = new Date().getTime();
-    getEmail(message);
+
+    // Grab user's email address from localstorage settings
+    chrome.storage.sync.get({user: ''}, function (items) {
+      if (items.user === '') {
+        items.user = 'unknown-user';
+        chrome.tabs.create({url: "options.html"});
+      }
+      message.user = items.user;
+
+      // Post item
+      var firebase = new Firebase('https://feedbyte.firebaseio.com/');
+      firebase.push(message);
+
+      // Show confirmation
+      document.body.innerHTML = "<h3>Thank you!</h3>";
+    });
+
   });
 
 });
