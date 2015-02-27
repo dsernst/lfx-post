@@ -1,6 +1,6 @@
-/*global chrome*/
+/*global chrome,Firebase*/
 // Letsfix Chrome Extension
-// 
+//
 // Share URL with crowd.
 // Connect with other who are feeling what you're feeling at that exact moment.
 // by: letsfix.net
@@ -23,25 +23,11 @@ var noteSuccess = function (data, textStatus, jqXHR) {
 };
 
 var postItem = function (message) {
-  var timestamp = new Date().getTime();
-  // var uploadPath = 'http://lfxpost.s3.amazonaws.com/' + message.user + '/' + timestamp + '.json';
-  // $.ajax({
-  //   type: "PUT",
-  //   url: uploadPath,
-  //   contentType: 'application/json',
-  //   async: false,
-  //   headers: {'x-amz-acl': 'bucket-owner-full-control'},
-  //   data: JSON.stringify({"data": message}),
-  //   error: noteErrors,
-  //   success: noteSuccess
-  // });
-  Parse.initialize("oVtdba00w4uiXhxmlujQUM8iu5LJT5jbIvjnErcC", "v1l0JGIDfi0ZEFHWOVz7WIx88QfLTqHD4Ae5bgRK");
-  var FeedByte = Parse.Object.extend("feedByte");
-  var feedByte = new FeedByte();
-  feedByte.save(message, {
-    success: noteSuccess,
-    error: noteErrors
-  })
+  var firebase = new Firebase('https://feedbyte.firebaseio.com/');
+  firebase.set(message);
+
+  //  success: noteSuccess,
+  //  error: noteErrors
 };
 
 var getEmail = function (message) {
@@ -73,10 +59,10 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#commentField').focus();
   });
 
-  $('#togglePageDetails').click(function(){
+  $('#togglePageDetails').click(function () {
     $('#pageDetails').toggle();
     message.pageDetails = !message.pageDetails;
-  })
+  });
 
   $('#submitComment').click(function (e) {
     e.preventDefault();
