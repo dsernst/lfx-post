@@ -1,7 +1,7 @@
 {
   "name": "Feedbyte",
   "description": "Give Hack Reactor a Feedbyte",
-  "version": "1.0",
+  "version": "1.4",
   "options_page": "options.html",
   "permissions": [
     "tabs", "http://*/*", "https://*/*", "storage"
